@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.BoardMapper">
+
+	<sql id="criteria">
+		<trim prefix="AND (" suffix=")" prefixOverrides="OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like CONCAT('%', #{keyword}, '%')
+						</when>
+						<when test="type == 'C'.toString()">
+							content like CONCAT('%', #{keyword}, '%')
+						</when>
+					<!-- 	<when test="type == 'W'.toString()">
+							emp_no like CONCAT('%', #{keyword}, '%')
+						</when> -->
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+	<select id="getTotalCount" resultType="int">
+		<![CDATA[
+			SELECT count(*) 
+			FROM board
+			WHERE b_no > 0 
+		]]>
+
+		<include refid="criteria" />
+
+	</select>
+
+	<select id="getListWithPaging"
+		resultType="org.zerock.domain.vo.BoardVO">
+		<![CDATA[
+			select b.*, concat(e.first_name,' ', e.last_name) as name, count(r.b_no) as reply_cnt 
+			from board b
+			join employees e on b.emp_no = e.emp_no
+			left join reply r on b.b_no = r.b_no
+			where b.b_no > 0
+		]]>
+
+		<include refid="criteria" />
+		group by b.b_no
+		ORDER BY b_no DESC
+		LIMIT #{pageStart}, #{amount}
+
+	</select>
+
+
+
+
+
+	<select id="read" resultType="org.zerock.domain.vo.BoardVO">
+		<![CDATA[
+			SELECT b.*, concat(e.first_name,' ', e.last_name) as name 
+			FROM board b
+			join employees e on b.emp_no = e.emp_no 
+		]]>
+		<where>
+			<if test="b_no != null">
+				b_no = #{b_no}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insert" keyProperty="b_no" useGeneratedKeys="true">
+		
+		<![CDATA[
+		insert into board(emp_no, title, content) values (#{emp_no}, #{title},#{content})
+		]]>
+	</insert>
+
+	<insert id="insertSelectKey">
+
+		<selectKey order="BEFORE" keyProperty="b_no"
+			resultType="Long">
+			<![CDATA[
+			select MAX(b_no)+1 from board
+			]]>
+		</selectKey>
+		<![CDATA[
+		insert into board(b_no, emp_no, title, content) values (#{b_no},#{emp_no},#{title},#{content})
+		]]>
+	</insert>
+
+	<delete id="delete">
+		<![CDATA[
+		delete from board where b_no=#{b_no}
+		]]>
+	</delete>
+
+	<update id="update">
+		<![CDATA[
+		update board set title =#{title}, content=#{content}, update_date=now() 
+		where b_no=#{b_no} 
+		]]>
+	</update>
+	
+	<!-- 
+	<update id="updateReplyCnt">
+		UPDATE board
+		SET replycnt=replycnt+#{amount}
+		WHERE b_no=#{b_no}
+	</update> -->
+	
+</mapper>
