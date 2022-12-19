@@ -95,7 +95,9 @@ public class BoardController {
 	}
 
 	@GetMapping("/register")
+	@PreAuthorize("isAuthenticated()")
 	public void register() {
+		log.info("....register");
 
 	}
 
