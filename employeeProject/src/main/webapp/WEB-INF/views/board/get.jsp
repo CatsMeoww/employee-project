@@ -67,7 +67,7 @@
 			<div class="panel-body">
 
 				<div class="form-group" hidden>
-					<label>Bno</label> <input class="form-control" name="bno"
+					<label>BNO</label> <input class="form-control" name="bno"
 						value="<c:out value='${board.b_no}'/>" readonly="readonly">
 				</div>
 
