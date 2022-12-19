@@ -72,26 +72,26 @@
 				</div>
 
 				<div class="form-group">
-					<label>Title</label> <input class="form-control" name="title"
+					<label>TITLE</label> <input class="form-control" name="title"
 						value="<c:out value='${board.title}'/>" readonly="readonly">
 				</div>
 				<div class="form-group">
-					<label>Text area</label>
+					<label>Text AREA</label>
 					<textarea class="form-control" rows="3" name="content"
 						readonly="readonly"><c:out value='${board.content}' />
 						</textarea>
 				</div>
 				<div class="form-group">
-					<label>Writer</label> <input class="form-control" name="name"
+					<label>WRITER</label> <input class="form-control" name="name"
 						value="<c:out value='${board.name}'/>" readonly="readonly">
 				</div>
 				<div class="form-group">
-					<label>Reg Date</label> <input class="form-control" name="regdate"
+					<label>REG DATE</label> <input class="form-control" name="regdate"
 						value="<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${board.reg_date }" />"
 						readonly="readonly">
 				</div>
 				<div class="form-group">
-					<label>Upt Date</label> <input class="form-control"
+					<label>UPT DATE</label> <input class="form-control"
 						name="updatedate"
 						value="<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${board.update_date }" />"
 						readonly="readonly">
